@@ -11,9 +11,8 @@ import scrapy
 class Houseprice_nj(scrapy.Item):
     name=scrapy.Field()
     location=scrapy.Field()
+    # cordinate=scrapy.Field()
+    lng = scrapy.Field()
+    lat = scrapy.Field()
     price=scrapy.Field()
-    area=scrapy.Field()
-
-#存放链接地址
-class Housepriceurl(scrapy.Item):
-	url=scrapy.Field()
+    when=scrapy.Field()

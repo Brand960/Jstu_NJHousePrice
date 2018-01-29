@@ -21,6 +21,18 @@ FEED_EXPORT_ENCODING = 'utf-8'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
+# ITEM_PIPELINES='HousePriceNJ.pipelines.HousepricenjPipeline'
+
+#DB
+MONGODB_HOST = '127.0.0.1'
+MONGODB_PORT = 27017
+MONGODB_DBNAME = 'NJ_HousePrice'
+MONGODB_TABLE='Test'
+
+#BaiduApi
+ak="1wgyLlU4Rpb21GtLBj7cXl6rd55scdzQ"
+api="http://api.map.baidu.com/geocoder/v2/?output=json"
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
