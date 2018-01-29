@@ -41,14 +41,19 @@ class LianjiaSpider(scrapy.spiders.Spider):
         #     lng = []
         #     lat = []
         item["name"] = response.xpath('//h1/text()').extract()[0]
-        item["price"] = response.xpath('//span[@class="junjia"]/text()').extract()[0]
-
         if response.xpath('//p[@class="where "]/span/text()').extract():
             item["location"] = "南京" + response.xpath('//p[@class="where "]/span/text()').extract()[0].split("：")[1]
         else:
             item["location"] = "南京" + response.xpath('//p[@class="where manager"]/span/text()').extract()[0].split("：")[
                 1]
-
+        if response.xpath('//p[@class="when "]/span/text()').extract():
+            item["when"] = response.xpath('//p[@class="when "]/span/text()').extract()[1]
+        else:
+            item["when"] = response.xpath('//p[@class="when manager"]/span/text()').extract()[1]
+        if response.xpath('//span[@class="junjia"]/text()').extract():
+            item["price"] = response.xpath('//span[@class="junjia"]/text()').extract()[0]
+        else:
+            item["price"] = 0
         # locations = list(item["location"])
         # for location in locations:
         url = baidu_url + "&address=" + item["location"]
@@ -57,9 +62,5 @@ class LianjiaSpider(scrapy.spiders.Spider):
         # lat.append(CordinateXY["lat"])
         item["lng"] = CordinateXY["lng"]
         item["lat"] = CordinateXY["lat"]
-        if response.xpath('//p[@class="when "]/span/text()').extract():
-            item["when"] = response.xpath('//p[@class="when "]/span/text()').extract()[1]
-        else:
-            item["when"] = response.xpath('//p[@class="when manager"]/span/text()').extract()[1]
 
         yield item
