@@ -7,12 +7,13 @@
 
 import scrapy
 
-#房名、地址、价格、价格/平方、户型面积
+
+# 房名、地址、价格、价格/平方、户型面积
 class Houseprice_nj(scrapy.Item):
-    name=scrapy.Field()
-    location=scrapy.Field()
+    name = scrapy.Field()
+    location = scrapy.Field()
     # cordinate=scrapy.Field()
     lng = scrapy.Field()
     lat = scrapy.Field()
-    price=scrapy.Field()
-    when=scrapy.Field()
+    price = scrapy.Field()
+    when = scrapy.Field()
