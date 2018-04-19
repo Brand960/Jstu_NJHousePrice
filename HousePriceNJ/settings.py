@@ -8,7 +8,7 @@
 #     https://doc.scrapy.org/en/latest/topics/settings.html
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
+import time
 BOT_NAME = 'HousePriceNJ'
 
 SPIDER_MODULES = ['HousePriceNJ.spiders']
@@ -29,6 +29,9 @@ MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
 MONGODB_DB = 'test'
 MONGODB_COLLECTION = 'data'
+
+LOG_FILE=str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))+".log"
+# LOG_LEVEL = 'WARNING'
 
 # BaiduApi
 ak = "1wgyLlU4Rpb21GtLBj7cXl6rd55scdzQ"
