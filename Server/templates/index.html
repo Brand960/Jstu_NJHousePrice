@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=xxDvwzjfPqy3OaFdn0xvca0MIEEoG0rI"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <title>Index</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <style type="text/css">
+        ul, li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            float: left;
+        }
+
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            font-family: "微软雅黑";
+        }
+
+        #container {
+            height: 500px;
+            width: 100%;
+        }
+
+        #r-result {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <ul>
+                {% for file in files %}
+                    <li><a href="/?name={{ file }}">{{ file }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-10">
+            {% if data_list %}
+                <div id="container"></div>
+                <div id="r-result">
+                    <input type="button" onclick="openHeatmap();" value="显示热力图"/><input type="button"
+                                                                                        onclick="closeHeatmap();"
+                                                                                        value="关闭热力图"/>
+                </div>
+                </body>
+                </html>
+                <script type="text/javascript">
+                    var map = new BMap.Map("container");          // 创建地图实例
+                    var point = new BMap.Point(118.802422, 32.064652);
+                    map.centerAndZoom(point, 13);             // 初始化地图，设置中心点坐标和地图级别
+                    map.enableScrollWheelZoom(); // 允许滚轮缩放
+                    var points = {{ data_list |safe}};
+                    if (!isSupportCanvas()) {
+                        alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+                    }
+
+                    {#function addMarker(point) {#}
+                    {#    var marker = new BMap.Marker(point);#}
+                    {#    map.addOverlay(marker);#}
+                    {# } #}
+                    {##}
+                    {#{% for data in data_list %}#}
+                    {#    var temp_point = new BMap.Point({{ data.lng }}, {{ data.lat }});#}
+                    {#    addMarker(temp_point);#}
+                    {#{% endfor %}#}
+
+                    //详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
+                    //参数说明如下:
+                    /* visible 热力图是否显示,默认为true
+                     * opacity 热力的透明度,1-100
+                     * radius 势力图的每个点的半径大小
+                     * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
+                     *	{
+                            .2:'rgb(0, 255, 255)',
+                            .5:'rgb(0, 110, 255)',
+                            .8:'rgb(100, 0, 255)'
+                        }
+                        其中 key 表示插值的位置, 0~1.
+                            value 为颜色值.
+                     */
+                    heatmapOverlay = new BMapLib.HeatmapOverlay({"radius": 18}, {"opacity": 1});
+                    map.addOverlay(heatmapOverlay);
+                    heatmapOverlay.setDataSet({data: points, max: 60000});
+
+                    //是否显示热力图
+                    function openHeatmap() {
+                        heatmapOverlay.show();
+                    }
+
+                    function closeHeatmap() {
+                        heatmapOverlay.hide();
+                    }
+
+                    closeHeatmap();
+                    heatmapOverlay.show();
+
+                    function setGradient() {
+                        /*格式如下所示:
+                       {
+                             0:'rgb(102, 255, 0)',
+                             .5:'rgb(255, 170, 0)',
+                             1:'rgb(255, 0, 0)'
+                       }*/
+                        var gradient = {};
+                        var colors = document.querySelectorAll("input[type='color']");
+                        colors = [].slice.call(colors, 0);
+                        colors.forEach(function (ele) {
+                            gradient[ele.getAttribute("data-key")] = ele.value;
+                        });
+                        heatmapOverlay.setOptions({"gradient": gradient});
+                    }
+
+                    //判断浏览区是否支持canvas
+                    function isSupportCanvas() {
+                        var elem = document.createElement('canvas');
+                        return !!(elem.getContext && elem.getContext('2d'));
+                    }
+
+
+                </script>
+            {% endif %}
+</div>
+</div>
+</div>
+</body>
+</html>
