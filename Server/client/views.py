@@ -13,6 +13,7 @@ def index(request):
     for root, dir, files_list in os.walk(files_dir):
         pass
 
+    files_list.sort()
     file_name = request.GET.get("name", "")
     if file_name:
         csv_reader = csv.reader(open(files_dir + '/' + file_name, encoding='utf-8'))
