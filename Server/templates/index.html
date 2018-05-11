@@ -95,7 +95,8 @@
                                     return
                                 }
                             }
-                            location.href = window.location.href + "&begin_date=" + document.getElementById("begin_date").value + "&end_date=" + document.getElementById("end_date").value
+                            //alert(window.location.host + "/?name=" + "{{ file_name |safe}}" + "&begin_date=" + document.getElementById("begin_date").value + "&end_date=" + document.getElementById("end_date").value);
+                            location = "/?name=" + "{{ file_name |safe}}" + "&begin_date=" + document.getElementById("begin_date").value + "&end_date=" + document.getElementById("end_date").value
                         })
                     })
                 </script>
