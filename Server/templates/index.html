@@ -54,11 +54,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-2">
-            <ul>
+            <div class="btn-group-vertical" role="group" aria-label="...">
                 {% for file in files %}
-                    <li><a href="/?name={{ file }}">{{ file }}</a></li>
+                    <a href="/?name={{ file }}" class="btn btn-default" role="button">{{ file }}</a>
                 {% endfor %}
-            </ul>
+            </div>
+            {#            <ul>#}
+            {#                {% for file in files %}#}
+            {#                    <li><a href="/?name={{ file }}">{{ file }}</a></li>#}
+            {#                {% endfor %}#}
+            {#            </ul>#}
         </div>
         <div class="col-md-10">
             {% if data_list %}
