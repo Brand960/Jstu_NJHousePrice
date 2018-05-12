@@ -49,7 +49,15 @@ def index(request):
                      "place_name": row[4]})  # , "name": row[4]})
             except Exception as e:
                 pass
+        if end_price:
+            scale = {"a": (int(end_price) * 0.45), "b": int(end_price) * 0.55, "c": int(end_price) * 0.65,
+                     "d": int(end_price) * 0.8,
+                     "e": int(end_price) * 0.95, "f": int(end_price)}
+        else:
+            scale = {"a": 45000, "b": 55000, "c": 65000, "d": 80000, "e": 95000,
+                     "f": 100000}
         return render(request, "index.html",
                       {"files": files_list, "file_name": file_name, "data_list": data_list, "begin_date": begin_date,
-                       "end_date": end_date, "file_log": file_log, "begin_price": begin_price, "end_price": end_price})
+                       "end_date": end_date, "file_log": file_log, "begin_price": begin_price, "end_price": end_price,
+                       "scale": scale})
     return render(request, "index.html", {"files": files_list})
