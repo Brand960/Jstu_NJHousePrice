@@ -66,7 +66,7 @@
             {#            </ul>#}
         </div>
         <div class="col-md-10">
-            {% if data_list %}
+
                 <div id="container"></div>
                 <div id="r-result" style="padding-top: 10px">
                     <input type="button" onclick="openHeatmap();" value="显示热力图"/>
@@ -78,6 +78,14 @@
                     <span style="background-color: #7cb7f7;width:20px;text-align: right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>20000及以下
                 </div>
                 <div style="padding-top: 10px">
+                    <labele>房价筛选(每平方米)：</labele>
+                    <input type="number" id="begin_price" style="width: 300px;height: 30px" value={{ begin_price }}>至
+                    <input type="number" id="end_price" style="width: 300px;height: 30px" value={{ end_price }}>
+                    <button class="btn btn-info" id="date_controller" type="button">筛选</button>
+                </div>
+
+                <div style="padding-top: 10px">
+                    <labele>房源入市时间筛选：</labele>
                     <input type="date" id="begin_date" style="width: 300px;height: 30px" value={{ begin_date }}>至
                     <input type="date" id="end_date" style="width: 300px;height: 30px" value={{ end_date }}>
                     <button class="btn btn-info" id="date_controller" type="button">筛选</button>
@@ -94,6 +102,14 @@
                 <script type="text/javascript">
                     $(document).ready(function () {
                         $("#date_controller").click(function () {
+                            var begin_price = document.getElementById("begin_price").value
+                            var end_price = document.getElementById("end_price").value
+                            if (document.getElementById("end_price").value) {
+                                if (document.getElementById("begin_price").value > document.getElementById("end_price").value) {
+                                    alert("开始价格不能大于结束价格！")
+                                    return
+                                }
+                            }
                             if (document.getElementById("end_date").value) {
                                 if (document.getElementById("begin_date").value > document.getElementById("end_date").value) {
                                     alert("开始日期不能大于结束日期！")
@@ -101,7 +117,7 @@
                                 }
                             }
                             //alert(window.location.host + "/?name=" + "{{ file_name |safe}}" + "&begin_date=" + document.getElementById("begin_date").value + "&end_date=" + document.getElementById("end_date").value);
-                            location = "/?name=" + "{{ file_name |safe}}" + "&begin_date=" + document.getElementById("begin_date").value + "&end_date=" + document.getElementById("end_date").value
+                            location = "/?name=" + "{{ file_name |safe}}" + "&begin_date=" + document.getElementById("begin_date").value + "&end_date=" + document.getElementById("end_date").value + "&begin_price=" + begin_price + "&end_price=" + end_price
                         })
                     })
                 </script>
@@ -169,7 +185,7 @@
 
 
                 </script>
-            {% endif %}
+
         </div>
     </div>
 </div>

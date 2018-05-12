@@ -17,10 +17,8 @@ def index(request):
     file_name = request.GET.get("name", "")
     begin_date = request.GET.get("begin_date", "")
     end_date = request.GET.get("end_date", "")
-    # if begin_date and not end_date:
-    #     end_date = "2099-12-31"
-    # if end_date and not begin_date:
-    #     begin_date = "1996-02-25"
+    begin_price = request.GET.get("begin_price", "")
+    end_price = request.GET.get("end_price", "")
     if file_name:
         csv_reader = csv.reader(open(files_dir + '/' + file_name, encoding='utf-8'))
         log_name = os.path.dirname(BASE_DIR) + "/log/" + file_name.split(".csv")[0] + ".log"
@@ -40,6 +38,12 @@ def index(request):
                 if end_date:
                     if not end_date > row[5]:
                         continue
+                if begin_price:
+                    if not int(begin_price) < int(row[0]):
+                        continue
+                if end_price:
+                    if not int(end_price) > int(row[0]):
+                        continue
                 data_list.append(
                     {"lng": float(row[2]), "lat": float(row[3]), "count": int(row[0]),
                      "place_name": row[4]})  # , "name": row[4]})
@@ -47,5 +51,5 @@ def index(request):
                 pass
         return render(request, "index.html",
                       {"files": files_list, "file_name": file_name, "data_list": data_list, "begin_date": begin_date,
-                       "end_date": end_date, "file_log": file_log})
+                       "end_date": end_date, "file_log": file_log, "begin_price": begin_price, "end_price": end_price})
     return render(request, "index.html", {"files": files_list})
